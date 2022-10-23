@@ -3,9 +3,11 @@ import dotenv from  "dotenv";
 dotenv.config()
 import mongoose from "mongoose";
 import axios from "axios";
+import Message from "./models/Message.js";
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded());
 
 mongoose.connect(process.env.MONGO_DB_URL, ()=>{
     console.log("connected to mongodb...📦");
@@ -31,11 +33,40 @@ app.post("/send" ,async(req, res)=>{
             }
         })
 
+        
+        const messageObj = new Message({
+            sid: response.data.sid,
+            to: response.data.to,
+            from: response.data.from,
+            text: response.data.body,
+            status: response.data.status,
+            direction: 'outgoing'
+        })
+            
+        const savedMessage = await messageObj.save()
+    
         res.json({
             success: true,
-            message:"data send successfully!"
-            
+            data: savedMessage
         })
+})
+
+app.post('/receive', async (req, res) => {
+
+    const messageObj = new Message({
+        sid: req.body.SmsMessageSid,
+        to: req.body.To,
+        from: req.body.From,
+        text: req.body.Body,
+        status: req.body.SmsStatus,
+        direction: 'incoming'
+    })
+    await messageObj.save()
+
+    res.json({
+        status: true,
+        message: "message recived successfully"
+    });
 
 })
 

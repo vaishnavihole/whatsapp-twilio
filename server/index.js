@@ -38,7 +38,7 @@ app.post("/send" ,async(req, res)=>{
             sid: response.data.sid,
             to: response.data.to,
             from: response.data.from,
-            text: response.data.body,
+            text: text,
             status: response.data.status,
             direction: 'outgoing'
         })
@@ -52,7 +52,6 @@ app.post("/send" ,async(req, res)=>{
 })
 
 app.post('/receive', async (req, res) => {
-
     const messageObj = new Message({
         sid: req.body.SmsMessageSid,
         to: req.body.To,
@@ -70,6 +69,42 @@ app.post('/receive', async (req, res) => {
 
 })
 
+app.post('/status_update', async (req, res)=>{
+    console.log(req.body)
+    const STATUS_MAP = {
+        "queued": 0,
+        "sent": 1,
+        "delivered": 2,
+        "read": 3,
+        "failed": 4,
+        "undeliverd":5
+    }
+    const dbMessage = await Message.findOne({
+        sid: req.body.SmsSid
+    })
+    if(STATUS_MAP[dbMessage.status] > STATUS_MAP[req.body.SmsStatus]){
+
+        return res.json({
+            status: true,
+            message: "no need to update startus"
+        })
+    }
+    
+   const updatedMessage = await Message.updateOne({sid: req.body.SmsSid}, {
+        $set: {
+            status: req.body.SmsStatus
+        }
+    })
+
+    res.json({
+        status:true,
+        message:'status updated successfully'
+    })
+})
+
 app.listen(PORT, () =>{
     console.log(`Server is listening on port ${PORT}`)
 })
+
+
+

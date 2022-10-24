@@ -5,6 +5,7 @@ const messageSchema = new mongoose.Schema({
     to: String,
     from: String,
     status: String,
+    text: String
 },
 {
     timestamps: true

@@ -1,0 +1,14 @@
+.outgoing-message-container{
+    clear: both;
+    float: right;
+    box-shadow: 0.5px 0.5px 0.5px rgba(0,0,0,0.5);
+    padding: 5px;
+    display: block;
+    max-width: 400px;
+    margin: 10px;
+    border-radius: 10px 0 10px 10px;
+    min-height: 50px;
+    background-color: #d9fdd2;
+    min-width: 400px;
+    
+}

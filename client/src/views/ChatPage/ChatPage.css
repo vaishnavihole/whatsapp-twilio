@@ -1,0 +1,20 @@
+.chatpage-container {
+    background-color: #fcece3;
+    min-height: 80vh;
+    padding: 10px;
+}
+
+.mesaage-input-box-container {
+    background-color: #f0f2f5;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.message-input-box {
+    height: 50px;
+    width: 90%;
+    border-radius: 10px;
+    border: none;
+}
